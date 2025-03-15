@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>音乐播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        @font-face {
+    font-family: '华文行楷';
+    src: url('E:/Web/歌词/zhongqingshanchengbangbangti (1).ttf') format('truetype');
+    /* 可添加其他格式如woff、woff2等以提高兼容性 */
+    /* src: url('华文行楷.woff') format('woff'); */
+    /* src: url('华文行楷.woff2') format('woff2'); */
+}
+
+      .music-player {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border: 2px solid #030405;
+        }
+
+      .album-cover {
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%;
+            background-image: url('E:/Web/歌词/3.jpg');
+            background-size: contain;
+            background-position: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #040506;
+        }
+
+      .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #e90909;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+      .control-button {
+            background-color: #a3dbf0;
+            color: #fff;
+            border: 2px solid #008cb3;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+      .progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #098f59;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #000000;
+        }
+
+      .progress {
+            width: 0;
+            height: 100%;
+            background-color: #141414;
+            border-radius: 5px;
+        }
+
+      .lyrics-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background-image: url('E:/Web/歌词/4.jpg');
+            background-size: contain;
+            background-position: center;
+            border-radius: 5px;
+            border: 2px solid #007BFF;
+            background-color: rgba(255, 255, 255, 0.00001);
+        }
+
+      .lyrics {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: top 0.5s ease;
+        }
+
+      .lyrics p {
+            margin: 10px 0;
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="music-player">
+        <div class="album-cover"></div>
+        <div class="controls">
+            <button class="control-button" id="backward-button">ʚ</button>
+            <button class="control-button" id="play-pause-button">💗</button>
+            <button class="control-button" id="forward-button">ɞ</button>
+        </div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="lyrics-container">
+            <div class="lyrics" id="lyrics">
+                <p data-time="0">别说再见</p>
+                <p data-time="6">演唱：大笨钟</p>
+                <p data-time="13">夜风吹散了你的誓言</p>
+                <p data-time="19">眼泪藏不住心底的眷恋</p>
+                <p data-time="26">那句再见在耳边盘旋</p>
+                <p data-time="32.5">却像刀割一般让我心碎无言</p>
+                <p data-time="39.5">别说再见，别让爱走远</p>
+                <p data-time="46">我的世界只剩孤单的夜</p>
+                <p data-time="52.3">回忆如潮水，把我淹没在从前</p>
+                <p data-time="59.5">你可知道，我多想你还在身边</p>
+                <p data-time="70">街角的灯光黯淡如昨</p>
+                <p data-time="77">回忆是我们最深的枷锁</p>
+                <p data-time="82.9">照片里的笑容还那么温热</p>
+                <p data-time="88.5">可为何现实只剩冷漠割舍</p>
+                <p data-time="95.5">别说再见，别让爱走远</p>
+                <p data-time="102.5">我的世界只剩孤单的夜</p>
+                <p data-time="108.5">回忆如潮水，把我淹没在从前</p>
+                <p data-time="116">你可知道，我多想你还在身边</p>
+                <p data-time="122">如果时间能倒退</p>
+                <p data-time="129.5">我愿一生去奉陪</p>
+                <p data-time="136">可如今你已成了泪</p>
+                <p data-time="140">再也触碰不到你的美</p>
+                <p data-time="145.8">别说再见，别让爱走远</p>
+                <p data-time="152.9">即使梦碎也要用心去念</p>
+                <p data-time="159.5">你的名字刻在我的胸前</p>
+                <p data-time="165.8">即使此生再不见，爱仍不变</p>
+            </div>
+        </div>
+    </div>
+    <audio id="audio" src="E:\Web\歌词\别说再见.mp3"></audio>
+    <script>
+        const playPauseButton = document.getElementById('play-pause-button');
+        const backwardButton = document.getElementById('backward-button');
+        const forwardButton = document.getElementById('forward-button');
+        const progress = document.getElementById('progress');
+        const lyrics = document.getElementById('lyrics');
+        const lines = lyrics.getElementsByTagName('p');
+        const audio = document.getElementById('audio');
+        let isPlaying = false;
+        let currentTime = 0;
+        let currentLine = 0;
+        let charIndex = 0;
+        let timer;
+        let fontSize = 16;
+        const maxFontSize = 18;
+        const totalTime = 140;
+        const skipInterval = 5;
+
+        // 每秒更新一次状态的定时器
+        const intervalId = setInterval(() => {
+            if (isPlaying) {
+                currentTime = audio.currentTime;
+                if (currentTime > totalTime) {
+                    currentTime = totalTime;
+                    isPlaying = false;
+                    playPauseButton.textContent = '💗';
+                    audio.pause();
+                }
+                updateProgress();
+                updateLyrics();
+            }
+        }, 1000);
+
+        playPauseButton.addEventListener('click', () => {
+            isPlaying =!isPlaying;
+            playPauseButton.textContent = isPlaying? '💘' : '💗';
+            if (isPlaying) {
+                audio.play();
+                // 点击播放时，根据当前时间更新歌词显示
+                updateLyrics();
+            } else {
+                audio.pause();
+            }
+        });
+
+        backwardButton.addEventListener('click', () => {
+            currentTime = Math.max(0, currentTime - skipInterval);
+            audio.currentTime = currentTime;
+            updateProgress();
+            updateLyrics();
+        });
+
+        forwardButton.addEventListener('click', () => {
+            currentTime = Math.min(totalTime, currentTime + skipInterval);
+            audio.currentTime = currentTime;
+            updateProgress();
+            updateLyrics();
+        });
+
+        // 更新进度条的函数
+        function updateProgress() {
+            const percentage = (currentTime / totalTime) * 100;
+            progress.style.width = `${percentage}%`;
+        }
+
+        // 更新歌词显示的函数
+        function updateLyrics() {
+            for (let i = 0; i < lines.length; i++) {
+                const lineTime = parseInt(lines[i].getAttribute('data-time'));
+                if (lineTime <= currentTime && (i === lines.length - 1 || parseInt(lines[i + 1].getAttribute('data-time')) > currentTime)) {
+                    if (i!== currentLine) {
+                        if (timer) clearInterval(timer);
+                        resetLine(lines[currentLine]);
+                        currentLine = i;
+                        charIndex = 0;
+                        fontSize = 16;
+                        const currentText = lines[currentLine].textContent;
+                        if (currentText.length > 0) {
+                            lines[currentLine].innerHTML = '';
+                            for (let j = 0; j < currentText.length; j++) {
+                                const span = document.createElement('span');
+                                span.textContent = currentText[j];
+                                lines[currentLine].appendChild(span);
+                            }
+                            timer = setInterval(() => {
+                                if (charIndex < currentText.length) {
+                                    const spans = lines[currentLine].getElementsByTagName('span');
+                                    spans[charIndex].style.color ='red';
+                                    charIndex++;
+                                    if (fontSize < maxFontSize) {
+                                        fontSize += 0.1;
+                                        lines[currentLine].style.fontSize = `${fontSize}px`;
+                                    }
+                                } else {
+                                    clearInterval(timer);
+                                }
+                            }, 10); // 调整歌词变色速度，这里改为 50 毫秒
+                        }
+                        const lineHeight = parseInt(getComputedStyle(lines[0]).height);
+                        const targetTop = -(currentLine * lineHeight);
+                        lyrics.style.top = `${targetTop}px`;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // 重置歌词行样式的函数
+        function resetLine(line) {
+            const text = line.textContent;
+            line.innerHTML = text;
+            if (parseFloat(line.style.fontSize) < maxFontSize) {
+                line.style.fontSize = '16px';
+            }
+            line.querySelectorAll('span').forEach(span => {
+                span.style.color = 'initial';
+            });
+        }
+    </script>
+</body>
+
+</html>    
