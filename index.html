@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>音乐播放器</title>
+    <title>别说再见</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -155,10 +155,10 @@
                 <p data-time="108.5">回忆如潮水，把我淹没在从前</p>
                 <p data-time="115.5">你可知道，我多想你还在身边</p>
                 <p data-time="122.3">如果时间能倒退</p>
-                <p data-time="129.5">我愿一生去奉陪</p>
+                <p data-time="129.3">我愿一生去奉陪</p>
                 <p data-time="135.8">可如今你已成了泪</p>
                 <p data-time="139.5">再也触碰不到你的美</p>
-                <p data-time="145.8">别说再见，别让爱走远</p>
+                <p data-time="145.4">别说再见，别让爱走远</p>
                 <p data-time="152.9">即使梦碎也要用心去念</p>
                 <p data-time="159.3">你的名字刻在我的胸前</p>
                 <p data-time="165.8">即使此生再不见，爱仍不变</p>
@@ -293,19 +293,18 @@
             });
         }
 
-        // 拖动爱心控制进度条
-        progressHeart.addEventListener('mousedown', (e) => {
+        // 拖动爱心控制进度条，添加触摸事件支持
+        function startDrag(e) {
             isDragging = true;
             const rect = progressBar.getBoundingClientRect();
             const offsetX = rect.left;
             const width = rect.width;
+            const clientX = e.clientX || e.touches[0].clientX;
 
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-
-            function onMouseMove(e) {
+            function onMove(e) {
                 if (isDragging) {
-                    const x = e.clientX - offsetX;
+                    const currentX = e.clientX || e.touches[0].clientX;
+                    const x = currentX - offsetX;
                     let percentage = (x / width) * 100;
                     percentage = Math.min(100, Math.max(0, percentage)); // 限制百分比在 0 - 100 之间
                     progressHeart.style.left = `${percentage}%`;
@@ -315,12 +314,22 @@
                 }
             }
 
-            function onMouseUp() {
+            function onEnd() {
                 isDragging = false;
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchend', onEnd);
             }
-        });
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('touchmove', onMove);
+            document.addEventListener('mouseup', onEnd);
+            document.addEventListener('touchend', onEnd);
+        }
+
+        progressHeart.addEventListener('mousedown', startDrag);
+        progressHeart.addEventListener('touchstart', startDrag);
     </script>
 </body>
 
