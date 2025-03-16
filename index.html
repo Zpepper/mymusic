@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>别说再见</title>
+    <title>音乐播放器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,6 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
             background-image: url('R-C.gif');
             background-size: cover;
             background-position: center;
@@ -70,13 +69,18 @@
             border-radius: 5px;
             margin-bottom: 20px;
             border: 1px solid #000000;
+            position: relative;
+            overflow: hidden; /* 防止爱心超出进度条 */
         }
 
-       .progress {
-            width: 0;
-            height: 100%;
-            background-color: #141414;
-            border-radius: 5px;
+       .progress-heart {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: red;
+            font-size: 18px;
+            left: 0;
+            cursor: pointer;
         }
 
        .lyrics-container {
@@ -84,8 +88,8 @@
             overflow: hidden;
             position: relative;
             border-radius: 5px;
-            border: 2px solid #000307;
-            background-color: transparent; /* 设置为透明 */
+            border: 2px solid #007BFF;
+            background-color: transparent;
         }
 
        .lyrics-container::before {
@@ -98,13 +102,13 @@
             background-image: url('4.jpg');
             background-size: contain;
             background-position: center;
-            opacity: 1; /* 这里可以调整背景图片的透明度，取值范围 0 - 1，0 为完全透明，1 为完全不透明 */
+            opacity: 1;
             z-index: -1;
         }
 
        .lyrics {
             position: absolute;
-            background-color: transparent; /* 设置为透明 */
+            background-color: transparent;
             top: 0;
             left: 0;
             width: 100%;
@@ -127,36 +131,36 @@
             <button class="control-button" id="play-pause-button">💗</button>
             <button class="control-button" id="forward-button">ɞ</button>
         </div>
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+        <div class="progress-bar" id="progress-bar">
+            <div class="progress-heart" id="progress-heart">💘</div>
         </div>
         <div class="lyrics-container">
             <div class="lyrics" id="lyrics">
                 <p data-time="0">别说再见</p>
                 <p data-time="6">演唱：大笨钟</p>
                 <p data-time="13">夜风吹散了你的誓言</p>
-                <p data-time="19">眼泪藏不住心底的眷恋</p>
-                <p data-time="26">那句再见在耳边盘旋</p>
-                <p data-time="32.5">却像刀割一般让我心碎无言</p>
-                <p data-time="39.5">别说再见，别让爱走远</p>
+                <p data-time="19.5">眼泪藏不住心底的眷恋</p>
+                <p data-time="25.8">那句再见在耳边盘旋</p>
+                <p data-time="32">却像刀割一般让我心碎无言</p>
+                <p data-time="39">别说再见，别让爱走远</p>
                 <p data-time="46">我的世界只剩孤单的夜</p>
                 <p data-time="52.3">回忆如潮水，把我淹没在从前</p>
-                <p data-time="59.5">你可知道，我多想你还在身边</p>
+                <p data-time="59.3">你可知道，我多想你还在身边</p>
                 <p data-time="70">街角的灯光黯淡如昨</p>
-                <p data-time="77">回忆是我们最深的枷锁</p>
-                <p data-time="82.9">照片里的笑容还那么温热</p>
-                <p data-time="88.5">可为何现实只剩冷漠割舍</p>
+                <p data-time="76.8">回忆是我们最深的枷锁</p>
+                <p data-time="82.4">照片里的笑容还那么温热</p>
+                <p data-time="88.8">可为何现实只剩冷漠割舍</p>
                 <p data-time="95.5">别说再见，别让爱走远</p>
                 <p data-time="102.5">我的世界只剩孤单的夜</p>
                 <p data-time="108.5">回忆如潮水，把我淹没在从前</p>
-                <p data-time="116">你可知道，我多想你还在身边</p>
-                <p data-time="122">如果时间能倒退</p>
+                <p data-time="115.5">你可知道，我多想你还在身边</p>
+                <p data-time="122.3">如果时间能倒退</p>
                 <p data-time="129.5">我愿一生去奉陪</p>
-                <p data-time="136">可如今你已成了泪</p>
-                <p data-time="140">再也触碰不到你的美</p>
+                <p data-time="135.8">可如今你已成了泪</p>
+                <p data-time="139.5">再也触碰不到你的美</p>
                 <p data-time="145.8">别说再见，别让爱走远</p>
                 <p data-time="152.9">即使梦碎也要用心去念</p>
-                <p data-time="159.5">你的名字刻在我的胸前</p>
+                <p data-time="159.3">你的名字刻在我的胸前</p>
                 <p data-time="165.8">即使此生再不见，爱仍不变</p>
             </div>
         </div>
@@ -166,7 +170,8 @@
         const playPauseButton = document.getElementById('play-pause-button');
         const backwardButton = document.getElementById('backward-button');
         const forwardButton = document.getElementById('forward-button');
-        const progress = document.getElementById('progress');
+        const progressHeart = document.getElementById('progress-heart');
+        const progressBar = document.getElementById('progress-bar');
         const lyrics = document.getElementById('lyrics');
         const lines = lyrics.getElementsByTagName('p');
         const audio = document.getElementById('audio');
@@ -179,6 +184,7 @@
         const maxFontSize = 18;
         let totalTime = 0;
         const skipInterval = 5;
+        let isDragging = false;
 
         // 动态获取音乐时长
         audio.addEventListener('loadedmetadata', function () {
@@ -187,7 +193,7 @@
 
         // 每秒更新一次状态的定时器
         const intervalId = setInterval(() => {
-            if (isPlaying) {
+            if (isPlaying &&!isDragging) {
                 currentTime = audio.currentTime;
                 if (currentTime > totalTime) {
                     currentTime = totalTime;
@@ -229,7 +235,8 @@
         // 更新进度条的函数
         function updateProgress() {
             const percentage = (currentTime / totalTime) * 100;
-            progress.style.width = `${percentage}%`;
+            const limitedPercentage = Math.min(100, Math.max(0, percentage)); // 限制百分比在 0 - 100 之间
+            progressHeart.style.left = `${limitedPercentage}%`;
         }
 
         // 更新歌词显示的函数
@@ -285,6 +292,35 @@
                 span.style.color = 'initial';
             });
         }
+
+        // 拖动爱心控制进度条
+        progressHeart.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const rect = progressBar.getBoundingClientRect();
+            const offsetX = rect.left;
+            const width = rect.width;
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+
+            function onMouseMove(e) {
+                if (isDragging) {
+                    const x = e.clientX - offsetX;
+                    let percentage = (x / width) * 100;
+                    percentage = Math.min(100, Math.max(0, percentage)); // 限制百分比在 0 - 100 之间
+                    progressHeart.style.left = `${percentage}%`;
+                    currentTime = (percentage / 100) * totalTime;
+                    audio.currentTime = currentTime;
+                    updateLyrics();
+                }
+            }
+
+            function onMouseUp() {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+        });
     </script>
 </body>
 
