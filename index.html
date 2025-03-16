@@ -14,16 +14,12 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
+            background-image: url(R-C.gif');
+            background-size: cover;
+            background-position: center;
         }
-        @font-face {
-    font-family: '华文行楷';
-    src: url('E:/Web/歌词/zhongqingshanchengbangbangti (1).ttf') format('truetype');
-    /* 可添加其他格式如woff、woff2等以提高兼容性 */
-    /* src: url('华文行楷.woff') format('woff'); */
-    /* src: url('华文行楷.woff2') format('woff2'); */
-}
 
-      .music-player {
+       .music-player {
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -33,10 +29,10 @@
             border: 2px solid #030405;
         }
 
-      .album-cover {
+       .album-cover {
             width: 100%;
             height: 0;
-            padding-bottom: 75%;
+            padding-bottom: 50%;
             background-image: url('3.jpg');
             background-size: contain;
             background-position: center;
@@ -45,7 +41,7 @@
             border: 2px solid #040506;
         }
 
-      .controls {
+       .controls {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -55,7 +51,7 @@
             border-radius: 5px;
         }
 
-      .control-button {
+       .control-button {
             background-color: #a3dbf0;
             color: #fff;
             border: 2px solid #008cb3;
@@ -67,7 +63,7 @@
             cursor: pointer;
         }
 
-      .progress-bar {
+       .progress-bar {
             width: 100%;
             height: 5px;
             background-color: #098f59;
@@ -76,35 +72,46 @@
             border: 1px solid #000000;
         }
 
-      .progress {
+       .progress {
             width: 0;
             height: 100%;
             background-color: #141414;
             border-radius: 5px;
         }
 
-      .lyrics-container {
-            height: 200px;
+       .lyrics-container {
+            height: 300px;
             overflow: hidden;
             position: relative;
+            border-radius: 5px;
+            border: 2px solid #000307;
+            background-color: transparent; /* 设置为透明 */
+        }
+
+       .lyrics-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url('4.jpg');
             background-size: contain;
             background-position: center;
-            border-radius: 5px;
-            border: 2px solid #007BFF;
-            background-color: rgba(255, 255, 255, 0.00001);
+            opacity: 1; /* 这里可以调整背景图片的透明度，取值范围 0 - 1，0 为完全透明，1 为完全不透明 */
+            z-index: -1;
         }
 
-      .lyrics {
+       .lyrics {
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: transparent; /* 设置为透明 */
             top: 0;
             left: 0;
             width: 100%;
             transition: top 0.5s ease;
         }
 
-      .lyrics p {
+       .lyrics p {
             margin: 10px 0;
             text-align: center;
             color: #333;
@@ -170,8 +177,13 @@
         let timer;
         let fontSize = 16;
         const maxFontSize = 18;
-        const totalTime = 140;
+        let totalTime = 0;
         const skipInterval = 5;
+
+        // 动态获取音乐时长
+        audio.addEventListener('loadedmetadata', function () {
+            totalTime = audio.duration;
+        });
 
         // 每秒更新一次状态的定时器
         const intervalId = setInterval(() => {
@@ -223,8 +235,8 @@
         // 更新歌词显示的函数
         function updateLyrics() {
             for (let i = 0; i < lines.length; i++) {
-                const lineTime = parseInt(lines[i].getAttribute('data-time'));
-                if (lineTime <= currentTime && (i === lines.length - 1 || parseInt(lines[i + 1].getAttribute('data-time')) > currentTime)) {
+                const lineTime = parseFloat(lines[i].getAttribute('data-time'));
+                if (lineTime <= currentTime && (i === lines.length - 1 || parseFloat(lines[i + 1].getAttribute('data-time')) > currentTime)) {
                     if (i!== currentLine) {
                         if (timer) clearInterval(timer);
                         resetLine(lines[currentLine]);
@@ -251,10 +263,10 @@
                                 } else {
                                     clearInterval(timer);
                                 }
-                            }, 10); // 调整歌词变色速度，这里改为 50 毫秒
+                            }, 10);
                         }
                         const lineHeight = parseInt(getComputedStyle(lines[0]).height);
-                        const targetTop = -(currentLine * lineHeight);
+                        const targetTop = -(i * lineHeight);
                         lyrics.style.top = `${targetTop}px`;
                     }
                     break;
